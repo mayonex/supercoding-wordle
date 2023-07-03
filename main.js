@@ -25,11 +25,14 @@ function appStart() {
     });
     word.forEach((item, index) => {
       targetList[index].classList.add("guessed");
+      handleKeyBoard(item, "guessed");
       findIndex = answer.indexOf(item);
       if (findIndex >= 0) {
         targetList[index].classList.add("half-correct");
+        handleKeyBoard(item, "half-correct");
         if (index == findIndex) {
           targetList[index].classList.add("full-correct");
+          handleKeyBoard(item, "full-correct");
           correct++;
           if (correct == 5) {
             const popUp = document.querySelector(".pop-up");
@@ -106,7 +109,13 @@ function appStart() {
       }
     }
   };
-
+  const handleKeyBoard = (word, className) => {
+    const keyBoard = document.querySelector(".wordle-keyboard");
+    const targetKey = keyBoard.querySelector(`.key-column[data-key='${word}'`);
+    if (targetKey) {
+      targetKey.classList.add(className);
+    }
+  };
   window.addEventListener("keydown", handleKeyDown);
 }
 window.addEventListener("load", appStart);
