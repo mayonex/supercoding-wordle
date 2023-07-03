@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+    <script src="main.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <h1>Wordle</h1>
+      <span class="timer">00 : 00</span>
+    </header>
+    <div class="pop-up hidden">
+      <h1>잘했어요!</h1>
+      <div class="pop-up__cancle">
+        <span>❌</span>
+      </div>
+      <span class="pop-up__icon">🎉</span>
+      <button><a href="#">다시 하실래요?</a></button>
+    </div>
+    <section class="wordle-board">
+      <div class="row" data-attempt="0">
+        <div class="column" data-index="00"></div>
+        <div class="column" data-index="01"></div>
+        <div class="column" data-index="02"></div>
+        <div class="column" data-index="03"></div>
+        <div class="column" data-index="04"></div>
+      </div>
+      <div class="row" data-attempt="1">
+        <div class="column" data-index="10"></div>
+        <div class="column" data-index="11"></div>
+        <div class="column" data-index="12"></div>
+        <div class="column" data-index="13"></div>
+        <div class="column" data-index="14"></div>
+      </div>
+      <div class="row" data-attempt="2">
+        <div class="column" data-index="20"></div>
+        <div class="column" data-index="21"></div>
+        <div class="column" data-index="22"></div>
+        <div class="column" data-index="23"></div>
+        <div class="column" data-index="24"></div>
+      </div>
+      <div class="row" data-attempt="3">
+        <div class="column" data-index="30"></div>
+        <div class="column" data-index="31"></div>
+        <div class="column" data-index="32"></div>
+        <div class="column" data-index="33"></div>
+        <div class="column" data-index="34"></div>
+      </div>
+      <div class="row" data-attempt="4">
+        <div class="column" data-index="40"></div>
+        <div class="column" data-index="41"></div>
+        <div class="column" data-index="42"></div>
+        <div class="column" data-index="43"></div>
+        <div class="column" data-index="44"></div>
+      </div>
+      <div class="row" data-attempt="5">
+        <div class="column" data-index="50"></div>
+        <div class="column" data-index="51"></div>
+        <div class="column" data-index="52"></div>
+        <div class="column" data-index="53"></div>
+        <div class="column" data-index="54"></div>
+      </div>
+    </section>
+    <section class="wordle-keyboard">
+      <div class="key-row">
+        <div class="key-column">Q</div>
+        <div class="key-column">W</div>
+        <div class="key-column">E</div>
+        <div class="key-column">R</div>
+        <div class="key-column">T</div>
+        <div class="key-column">Y</div>
+        <div class="key-column">U</div>
+        <div class="key-column">I</div>
+        <div class="key-column">O</div>
+        <div class="key-column">P</div>
+      </div>
+      <div class="key-row">
+        <div class="key-column">A</div>
+        <div class="key-column">S</div>
+        <div class="key-column">D</div>
+        <div class="key-column">F</div>
+        <div class="key-column">G</div>
+        <div class="key-column">H</div>
+        <div class="key-column">J</div>
+        <div class="key-column">K</div>
+        <div class="key-column">L</div>
+      </div>
+      <div class="key-row">
+        <div class="key-column big-key">ENTER</div>
+        <div class="key-column">Z</div>
+        <div class="key-column">X</div>
+        <div class="key-column">C</div>
+        <div class="key-column">V</div>
+        <div class="key-column">B</div>
+        <div class="key-column">N</div>
+        <div class="key-column">M</div>
+        <div class="key-column big-key">
+          <i class="fa-solid fa-delete-left"></i>
+        </div>
+      </div>
+    </section>
+    <script
+      src="https://kit.fontawesome.com/9f7def2701.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

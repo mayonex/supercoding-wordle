@@ -1,0 +1,185 @@
+@import url("reset.css");
+@import url("https://fonts.googleapis.com/css2?family=Yeon+Sung&display=swap");
+@keyframes keyInputEffect {
+  0% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    border: 1px solid black;
+    transform: scale(1.01);
+  }
+}
+@keyframes upAndDown {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+@keyframes scale {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
+}
+* {
+  box-sizing: border-box;
+}
+header {
+  text-align: center;
+  margin-top: 50px;
+}
+header h1 {
+  font-weight: 800;
+  font-size: 32px;
+  margin-bottom: 15px;
+  font-family: "Yeon Sung", cursive;
+}
+.timer {
+  font-family: "Yeon Sung", cursive;
+  font-weight: 600;
+  font-size: 24px;
+}
+.wordle-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 70px;
+}
+.wordle-board .row {
+  display: flex;
+  align-items: center;
+}
+.wordle-board .column {
+  width: 65px;
+  height: 65px;
+  border: 1.8px solid rgba(0, 0, 0, 0.3);
+  margin: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 900;
+  font-size: 32px;
+  transition: 1s;
+}
+.wordle-keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+}
+.key-row {
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.key-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  min-width: 50px;
+  min-height: 70px;
+  background-color: #d3d6da;
+  font-weight: 900;
+  font-size: 16px;
+  margin-left: 10px;
+}
+.big-key {
+  min-width: 80px;
+}
+.key-row:nth-child(2) {
+  padding: 0 10px;
+}
+.key-input {
+  animation: keyInputEffect 0.3s forwards ease-in-out;
+}
+.guessed {
+  background-color: #787c7e;
+  color: white;
+  transform: rotateX(360deg) scale(1.05);
+  transition: 0.5s;
+}
+.half-correct {
+  background-color: #c9b458;
+}
+.full-correct {
+  background-color: #6ba864;
+}
+.pop-up {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid black;
+  height: 500px;
+  max-width: 40%;
+  min-width: 420px;
+  font-size: 32px;
+  border-radius: 24px;
+  padding-top: 80px;
+  font-family: "Yeon Sung", cursive;
+  font-weight: 900;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -70%);
+  background-color: white;
+  z-index: 2;
+}
+
+.pop-up__icon {
+  margin-top: 100px;
+  font-size: 82px;
+}
+.icon-animation {
+  animation: upAndDown 1s both ease-in-out;
+}
+.pop-up .pop-up__cancle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32px;
+  cursor: pointer;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  padding: 10px;
+  border-radius: 50%;
+}
+.pop-up .pop-up__cancle:hover {
+  animation: scale 0.6s both ease-in-out;
+}
+.pop-up button {
+  width: 60%;
+  height: 60px;
+  border-radius: 12px;
+  background-color: #6ba864;
+  color: white;
+  font-family: "Yeon Sung", cursive;
+  font-size: 24px;
+  margin-top: 70px;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid black;
+}
+.pop-up button:hover {
+  animation: scale 0.6s both ease-in-out;
+}
+.pop-up button a {
+  text-decoration: none;
+  color: inherit;
+}
+.hidden {
+  visibility: hidden;
+}
+/* #C9B458" */
+/* #6BA864 */
