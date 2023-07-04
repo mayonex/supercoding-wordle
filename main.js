@@ -1,10 +1,19 @@
-const answer = "SUPER";
-function appStart() {
-  let attempt = 0;
-  let index = 0;
-  let isCorrect = 0;
-  let time;
-  const handleTimer = (startDate) => {
+class WordleBoard {
+  constructor() {
+    this.setElement();
+    this.setInitialState();
+    this.setEventListener();
+  }
+  setElement = () => {
+    this.board = document.querySelector(".wordle-board");
+  };
+  setTimer = () => {
+    this.startDate = new Date();
+    this.gameTimer = setInterval(() => {
+      this.handleTimer(this.startDate);
+    }, 1000);
+  };
+  handleTimer = (startDate) => {
     const timer = document.querySelector(".timer");
     const curDate = new Date();
     const timerDate = new Date(curDate - startDate);
@@ -14,108 +23,115 @@ function appStart() {
       .toString()
       .padStart(2, "0")}`;
   };
-  const handleEnterKey = (event) => {
-    let word = [];
-    let correct = 0;
-    const targetList = document.querySelectorAll(
-      `.column[data-index ^= '${attempt}'`
-    );
-    targetList.forEach((item) => {
-      word.push(item.innerText);
-    });
-    word.forEach((item, index) => {
-      targetList[index].classList.add("guessed");
-      handleKeyBoard(item, "guessed");
-      findIndex = answer.indexOf(item);
-      if (findIndex >= 0) {
-        targetList[index].classList.add("half-correct");
-        handleKeyBoard(item, "half-correct");
-        if (index == findIndex) {
-          targetList[index].classList.add("full-correct");
-          handleKeyBoard(item, "full-correct");
-          correct++;
-          if (correct == 5) {
-            const popUp = document.querySelector(".pop-up");
-            popUp.classList.remove("hidden");
-            const cancleBtn = document.querySelector(".pop-up__cancle");
-            const icon = document.querySelector(".pop-up__icon");
-            icon.classList.add("icon-animation");
-            cancleBtn.addEventListener("click", () => {
-              popUp.classList.add("hidden");
-            });
-            const btn = document.querySelector(".pop-up button");
-            btn.addEventListener("click", () => {
-              location.reload();
-            });
-            isCorrect = 1;
-          }
-        }
-      }
-    });
+  setInitialState = () => {
+    this.index = 0;
+    this.attempt = 0;
+    this.isCorrect = 0;
+    this.correctWord = "SUPER";
   };
-  const handleKeyDown = (event) => {
-    if (isCorrect == 1) {
-      return;
+  goNextLine = () => {
+    this.index = 0;
+    this.attempt++;
+  };
+  isValidKey = (key, keyCode) => {
+    if (65 <= keyCode && keyCode <= 90) {
+      if ("A" <= key && key <= "Z") return true;
     }
+  };
+  gameOver = (emoji, content) => {
+    clearInterval(this.gameTimer);
+    const popUp = document.querySelector(".pop-up");
+    popUp.classList.remove("hidden");
+    const text = popUp.querySelector("h1");
+    text.innerText = content;
+    const icon = document.querySelector(".pop-up__icon");
+    icon.innerText = emoji;
+    icon.classList.add("icon-animation");
+    const cancleBtn = document.querySelector(".pop-up__cancle");
+    cancleBtn.addEventListener("click", () => {
+      popUp.classList.add("hidden");
+    });
+    const btn = document.querySelector(".pop-up button");
+    btn.addEventListener("click", () => {
+      location.reload();
+    });
+    this.isCorrect = 1;
+  };
+  handleEnterKeyDown = () => {
+    let guessWord = [];
+    const targetBoards = document.querySelectorAll(
+      `.row[data-attempt ^= '${this.attempt}'] .column`
+    );
+    targetBoards.forEach((item) => guessWord.push(item.innerText));
+    return guessWord.join("");
+  };
+  setBoardState = (index, className) => {
+    document
+      .querySelector(`.column[data-index = '${this.attempt}${index}'`)
+      .classList.add(className);
+  };
+  setKeyBoardState = (key, className) => {
+    const targetKey = document.querySelector(`.key-column[data-key='${key}']`);
+    targetKey.classList.add(className);
+  };
+  isCorrectWord = (guessWord) => {
+    let correct = 0;
+    for (let i = 0; i < this.correctWord.length; i++) {
+      if (guessWord[i] === this.correctWord[i]) {
+        this.setBoardState(i, "correct-board");
+        this.setKeyBoardState(guessWord[i], "correct-board");
+        correct++;
+      } else if (this.correctWord.includes(guessWord[i])) {
+        this.setBoardState(i, "half-correct-board");
+        this.setKeyBoardState(guessWord[i], "half-correct-board");
+      } else {
+        this.setBoardState(i, "not-correct-board");
+        this.setKeyBoardState(guessWord[i], "not-correct-board");
+      }
+    }
+    if (correct == 5) {
+      this.gameOver("🎉", "잘했어요!");
+    }
+  };
+  handleBackspaceKeyDown = () => {
+    if (this.index > 0) {
+      this.index--;
+      const targetBoard = document.querySelector(
+        `.column[data-index='${this.attempt}${this.index}']`
+      );
+      targetBoard.innerText = "";
+    }
+  };
+  handleKeyDown = (event) => {
     const key = event.key.toUpperCase();
     const keyCode = event.keyCode;
-    if (index == 0 && attempt == 0) {
-      startDate = new Date();
-      time = setInterval(() => {
-        if (isCorrect == 1) {
-          clearInterval(time);
-        }
-        handleTimer(startDate);
-      }, 1000);
-    }
-    if (keyCode == 8) {
-      if (index == 0) return;
-      index--;
-      const target = document.querySelector(
-        `.column[data-index='${attempt}${index}']`
+    if (this.index == 5 && key == "ENTER") {
+      const guessWord = this.handleEnterKeyDown();
+      this.isCorrectWord(guessWord);
+      this.goNextLine();
+      if (this.attempt == 6) {
+        this.gameOver("♻️", "아쉬워요");
+      }
+    } else if (key == "BACKSPACE") {
+      this.handleBackspaceKeyDown();
+    } else if (this.isValidKey(key, keyCode)) {
+      if (this.index == 5) return;
+      if (this.isCorrect) return;
+      if (this.attempt == 0 && this.index == 0) {
+        this.setTimer();
+      }
+      const targetBoard = document.querySelector(
+        `.column[data-index='${this.attempt}${this.index}']`
       );
-      target.innerText = "";
-    }
-    if (index === 5) {
-      if (key == "ENTER") {
-        handleEnterKey();
-        index = 0;
-        attempt++;
-        if (attempt == 6 && !isCorrect) {
-          const popUp = document.querySelector(".pop-up");
-          popUp.classList.remove("hidden");
-          const text = popUp.querySelector("h1");
-          text.innerText = "아쉬워요";
-          const icon = document.querySelector(".pop-up__icon");
-          icon.innerText = "♻️";
-          const btn = document.querySelector(".pop-up button");
-          btn.addEventListener("click", () => {
-            location.reload();
-          });
-          clearInterval(time);
-        }
-      }
-      return;
-    }
-
-    if (65 <= keyCode && keyCode <= 90) {
-      if ("A" <= key && key <= "Z") {
-        const target = document.querySelector(
-          `.column[data-index='${attempt}${index}']`
-        );
-        target.innerText = key;
-        target.classList.add("key-input");
-        index++;
-      }
+      targetBoard.innerText = key;
+      targetBoard.classList.add("key-input");
+      this.index++;
     }
   };
-  const handleKeyBoard = (word, className) => {
-    const keyBoard = document.querySelector(".wordle-keyboard");
-    const targetKey = keyBoard.querySelector(`.key-column[data-key='${word}'`);
-    if (targetKey) {
-      targetKey.classList.add(className);
-    }
+  setEventListener = () => {
+    window.addEventListener("keydown", this.handleKeyDown);
   };
-  window.addEventListener("keydown", handleKeyDown);
 }
-window.addEventListener("load", appStart);
+window.addEventListener("load", () => {
+  const wordle = new WordleBoard();
+});
