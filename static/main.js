@@ -23,11 +23,14 @@ class WordleBoard {
       .toString()
       .padStart(2, "0")}`;
   };
-  setInitialState = () => {
+  setInitialState = async () => {
     this.index = 0;
     this.attempt = 0;
     this.isCorrect = 0;
-    this.correctWord = "SUPER";
+    const response = await fetch("/answer");
+    const res = await response.json();
+    this.correctWord = res.answer;
+    console.log(this.correctWord);
   };
   goNextLine = () => {
     this.index = 0;
